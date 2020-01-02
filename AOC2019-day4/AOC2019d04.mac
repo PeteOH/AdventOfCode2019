@@ -1,0 +1,55 @@
+ROUTINE AOC2019.D04
+
+Start() public {
+    set ctr1 = 0
+    set ctr2 = 0
+    for pwd=134564:1:585159 {
+        if $$isValid(pwd) {
+            do $Increment(ctr1)
+        }
+        if $$isValid2(pwd) {
+            do $Increment(ctr2)
+        }
+    }
+    w "Part 1: "_ctr1
+    w !,"Part 2: "_ctr2
+}
+
+isValid(pwd) public {
+    set hasDbl = 0
+    set rpt = 0
+    set lastdigit = $Extract(pwd,1)
+    for ctr=2:1:6 {
+        set digit=$Extract(pwd,ctr)
+        if digit < lastdigit { return 0 }
+        if digit = lastdigit { do $Increment(hasDbl) }
+        set lastdigit = digit
+    }
+    return (hasDbl > 0)
+}
+
+isValid2(pwd) public {
+    set hasDbl = 0
+    set isDbl = 0
+    set rpt = 1
+    set lastdigit = $Extract(pwd,1)
+    for ctr=2:1:6 {
+        set digit=$Extract(pwd,ctr)
+        if digit < lastdigit { return 0 }
+
+        if digit = lastdigit { 
+            set isDbl = 0 
+            do $Increment(rpt) 
+            if rpt = 2 { 
+                set isDbl = 1 
+            }
+        
+        } Else {
+            if isDbl { set hasDbl = 1, isDbl = 0 }
+            set rpt = 1
+        }
+        set lastdigit = digit
+    }
+    if isDbl { set hasDbl = 1, isDbl = 0 }
+    return hasDbl 
+}
