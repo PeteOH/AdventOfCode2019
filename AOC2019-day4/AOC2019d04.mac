@@ -3,7 +3,7 @@ ROUTINE AOC2019.D04
 Start() public {
     set ctr1 = 0
     set ctr2 = 0
-    for pwd=134564:1:585159 {
+    for pwd=387638:1:919123 {
         if $$isValid(pwd) {
             do $Increment(ctr1)
         }
