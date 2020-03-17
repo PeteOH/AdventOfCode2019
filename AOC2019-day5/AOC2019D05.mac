@@ -1,15 +1,16 @@
-ROUTINE AOC2019.D02
+ROUTINE AOC2019.D05
 
 #include %systemInclude
 
-runD02() public {
+runD05() public {
 
-    w !,"Part 1: "_$$getD02Out(12,2)
+
+    w !,"Part 1: "_$$getD05Out(12,2)
 
     set bfound = 0
     for noun=0:1:99 {
         for verb=0:1:99 {
-            set output = $$getD02Out(noun,verb)
+            set output = $$getD05Out(noun,verb)
             if output = 19690720 {
                 set bfound = 1
                 Quit
@@ -32,7 +33,7 @@ getData() public {
 
 }
 
-getD02Out(noun, verb) {
+getD05Out(noun, verb, input) {
     
     set positions = $$getData()
 
@@ -40,27 +41,46 @@ getD02Out(noun, verb) {
     set $li(positions, 3) = verb
 
     set iPtr = 1
-
+    set inc = 4
     //w !,"Starting Positions"
     //w !,$LTS(positions,",")
 
     while $li(positions, iPtr) '= 99 {
         set op = $li(positions, iPtr)
-        set valptr1 = $li(positions, iPtr+1)
-        set valptr2 = $li(positions, iPtr+2)
-        set outptr = $li(positions, iPtr+3)
-        set val1 = $li(positions, valptr1+1)
-        set val2 = $li(positions, valptr2+1)
 
+        if op = 1 {
+            set valptr1 = $li(positions, iPtr+1)
+            set valptr2 = $li(positions, iPtr+2)
+            set outptr = $li(positions, iPtr+3)
+            set val1 = $li(positions, valptr1+1)
+            set val2 = $li(positions, valptr2+1)            
+            set out=(val1 + val2)
+            set $li(positions, outptr+1) = out
+            set inc = 4
+        }
+        if op = 2 {
+            set valptr1 = $li(positions, iPtr+1)
+            set valptr2 = $li(positions, iPtr+2)
+            set outptr = $li(positions, iPtr+3)
+            set val1 = $li(positions, valptr1+1)
+            set val2 = $li(positions, valptr2+1)
+            set out=(val1 * val2)
+            set $li(positions, outptr+1) = out
+            set inc = 4
+        }
+        if op = 3 {
+            set outptr = $li(positions, iPtr+1)
+            set out=input
+            set $li(positions, outptr+1) = out
+            set inc = 2
+        }
+        if op = 4 {
+            set valptr1 = $li(positions, iPtr+1)
+            write !,$li(positions, valptr1+1)
+            set inc = 2
+        }
 
-        set:op=1 out=(val1 + val2)
-        set:op=2 out=(val1 * val2)
-
-        set $li(positions, outptr+1) = out
-
-        //w !,"iPtr: "_iPtr_", op "_op_", val1 "_val1_", val2 "_val2_", outptr "_outptr_", out "_out
-
-        do $Increment(iPtr,4)
+        do $Increment(iPtr,inc)
     }
     return $li(positions, 1)
 }
